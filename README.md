@@ -33,3 +33,9 @@ module "gitian" {
 contrib/gitian-build.py -j <THREADS> -m <MEMORY IN MB> -Ddnb ${VERIFIER_NAME} ${BITCOIN_TAG_VERSION}
 Ex: contrib/gitian-build.py -j 4 -m 3000 -Ddnb Satoshi 0.21.0rc1
 ```
+
+### GPG/PGP Signing:
+```
+gpg --output ${VERSION}-win-unsigned/${NAME}/bitcoin-core-win-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-win-unsigned/$NAME/bitcoin-core-win-${VERSION%\.*}-build.assert
+gpg --output ${VERSION}-linux/${NAME}/bitcoin-core-linux-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-linux/$NAME/bitcoin-core-linux-${VERSION%\.*}-build.assert
+```
