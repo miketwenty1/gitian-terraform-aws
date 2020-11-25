@@ -46,13 +46,12 @@ fi
 export USE_DOCKER=1
 cd /gitian
 git clone https://github.com/bitcoin/bitcoin.git
-cd bitcoin
 echo run gitigan setup
-contrib/gitian-build.py --setup
+bitcoin/contrib/gitian-build.py --setup
 echo create base docker image
 gitian-builder/bin/make-base-vm --docker --arch amd64 --suite bionic
 echo run docker build
 echo CORES to use: ${CORES}, memory to use: ${MEMORY}000
-contrib/gitian-build.py -j ${CORES} -m ${MEMORY}000 -Ddnb ${VERIFIER_NAME} ${VERSION}
+bitcoin/contrib/gitian-build.py -j ${CORES} -m ${MEMORY}000 -Ddnb ${VERIFIER_NAME} ${VERSION}
 
 # if you want to be a gitian signer you will need to scp / gpg sign / ssh / create PR  manually
