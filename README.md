@@ -39,3 +39,17 @@ Ex: contrib/gitian-build.py -j 4 -m 3000 -Ddnb Satoshi 0.21.0rc1
 gpg --output ${VERSION}-win-unsigned/${NAME}/bitcoin-core-win-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-win-unsigned/$NAME/bitcoin-core-win-${VERSION%\.*}-build.assert
 gpg --output ${VERSION}-linux/${NAME}/bitcoin-core-linux-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-linux/$NAME/bitcoin-core-linux-${VERSION%\.*}-build.assert
 ```
+
+### Verify:
+```
+pushd ./gitian-builder
+./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../bitcoin/contrib/gitian-descriptors/gitian-linux.yml
+./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../bitcoin/contrib/gitian-descriptors/gitian-win.yml
+./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../bitcoin/contrib/gitian-descriptors/gitian-osx.yml
+popd
+```
+
+Docs/resources:
+- https://github.com/devrandom/gitian-builder
+- https://github.com/bitcoin/bitcoin/blob/master/doc/release-process.md
+- https://github.com/bitcoin-core/docs/blob/master/gitian-building.md
