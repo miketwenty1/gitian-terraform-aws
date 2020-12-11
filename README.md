@@ -30,10 +30,14 @@ module "gitian" {
   - https://github.com/bitcoin-core/docs/blob/master/gitian-building.md
 - If you want to run subsequent builds from the same server `ssh/cd` into `/gitian/bitcoin` and run:
 ```
-export NAME=<your name>
-export VERSION=<bitcoin tag on github.com/bitcoin/bitcoin repo>
-export MEMORY_MB=<memory in MB>
-export THREADS=<number of cpu cores for faster builds>
+# your name
+export NAME=satoshi 
+# tag on github.com/bitcoin/bitcoin repo
+export VERSION=0.21.0rc3 
+# memory in MB
+export MEMORY_MB=25000 
+# number of cpu cores for faster builds
+export THREADS=15 
 
 cd /gitian/
 bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddnb ${NAME} ${VERSION}
