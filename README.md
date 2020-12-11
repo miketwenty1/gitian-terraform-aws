@@ -30,9 +30,15 @@ module "gitian" {
   - https://github.com/bitcoin-core/docs/blob/master/gitian-building.md
 - If you want to run subsequent builds from the same server `ssh/cd` into `/gitian/bitcoin` and run:
 ```
-contrib/gitian-build.py -j <THREADS> -m <MEMORY IN MB> -Ddnb ${VERIFIER_NAME} ${BITCOIN_TAG_VERSION}
-Ex: contrib/gitian-build.py -j 4 -m 3000 -Ddnb Satoshi 0.21.0rc1
+export NAME=<your name>
+export VERSION=<bitcoin tag on github.com/bitcoin/bitcoin repo>
+export MEMORY_MB=<memory in MB>
+export THREADS=<number of cpu cores for faster builds>
+
+cd /gitian/
+bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddnb ${NAME} ${VERSION}
 ```
+Ex: `bitcoin/contrib/gitian-build.py -j 4 -m 3000 -Ddnb Satoshi 0.21.0rc1`
 
 ### GPG/PGP Signing:
 ```
@@ -47,6 +53,12 @@ pushd ./gitian-builder
 ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../bitcoin/contrib/gitian-descriptors/gitian-win.yml
 ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../bitcoin/contrib/gitian-descriptors/gitian-osx.yml
 popd
+```
+
+### signed builds for OSX and Windows
+Once signed builds are available you may want to go back and sign those as well
+```
+bitcoin/contrib/gitian-build.py --detach-sign --no-commit -s $NAME $VERSION
 ```
 
 Docs/resources:
