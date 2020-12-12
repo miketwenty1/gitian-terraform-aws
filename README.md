@@ -28,7 +28,13 @@ module "gitian" {
 ### NOTES:
 - The purpose of this module is to easily check the gitian build checksums for yourself extra manual steps are required if you want to be a gitian signer:
   - https://github.com/bitcoin-core/docs/blob/master/gitian-building.md
-- If you want to run subsequent builds from the same server `ssh/cd` into `/gitian/bitcoin` and run:
+- If you want to run subsequent builds from the same server `ssh/cd` into `/gitian/bitcoin` and see the instructions below.
+- If you want to be a gitian contributor you will want to also setup:
+  - git (git config / ssh keys)
+  - pgp/gpg signing key
+  
+# Gitian signing steps
+### setup env vars
 ```
 # your name
 export SIGNER=satoshi 
