@@ -31,7 +31,7 @@ module "gitian" {
 - If you want to run subsequent builds from the same server `ssh/cd` into `/gitian/bitcoin` and run:
 ```
 # your name
-export NAME=satoshi 
+export SIGNER=satoshi 
 # tag on github.com/bitcoin/bitcoin repo
 export VERSION=0.21.0rc3 
 # memory in MB
@@ -40,14 +40,16 @@ export MEMORY_MB=25000
 export THREADS=15 
 
 cd /gitian/
-bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddnb ${NAME} ${VERSION}
+bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddnb ${SIGNER} ${VERSION}
 ```
 Ex: `bitcoin/contrib/gitian-build.py -j 4 -m 3000 -Ddnb Satoshi 0.21.0rc1`
 
 ### GPG/PGP Signing:
 ```
-gpg --output ${VERSION}-win-unsigned/${NAME}/bitcoin-core-win-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-win-unsigned/$NAME/bitcoin-core-win-${VERSION%\.*}-build.assert
-gpg --output ${VERSION}-linux/${NAME}/bitcoin-core-linux-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-linux/$NAME/bitcoin-core-linux-${VERSION%\.*}-build.assert
+pushd ./gitian.sigs
+gpg --output ${VERSION}-win-unsigned/${SIGNER}/bitcoin-core-win-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-win-unsigned/$SIGNER/bitcoin-core-win-${VERSION%\.*}-build.assert
+gpg --output ${VERSION}-linux/${SIGNER}/bitcoin-core-linux-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-linux/$SIGNER/bitcoin-core-linux-${VERSION%\.*}-build.assert
+popd
 ```
 
 ### Verify:
@@ -58,12 +60,48 @@ pushd ./gitian-builder
 ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../bitcoin/contrib/gitian-descriptors/gitian-osx.yml
 popd
 ```
-
-### signed builds for OSX and Windows
+### Push unsigned binary sigs
+```
+pushd gitian.sigs
+git add ${VERSION}-linux/"${SIGNER}"
+git add ${VERSION}-win-unsigned/"${SIGNER}"
+git add ${VERSION}-osx-unsigned/"${SIGNER}"
+git commit -m "Add ${VERSION} unsigned sigs for ${SIGNER}"
+git push  # Assuming you can push to the gitian.sigs tree
+popd
+```
+# signed builds for OSX and Windows (When they are ready)
 Once signed builds are available you may want to go back and sign those as well
+### OSX
+notice that these commands use "signature" flag instead of "bitcoin"
 ```
-bitcoin/contrib/gitian-build.py --detach-sign --no-commit -s $NAME $VERSION
+pushd ./gitian-builder
+./bin/gbuild -i --commit signature=v${VERSION} ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
+./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
+./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
+mv build/out/bitcoin-osx-signed.dmg ../bitcoin-${VERSION}-osx.dmg
+popd
 ```
+### Windows
+notice that these commands use "signature" flag instead of "bitcoin"
+```
+pushd ./gitian-builder
+bin/gbuild --num-make ${THREADS} --memory ${MEMORY_MB} --commit signature=v${VERSION} ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
+./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
+./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
+mv build/out/bitcoin-*win64-setup.exe ../bitcoin-${VERSION}-win64-setup.exe
+popd
+```
+### Push signed binary sigs
+```
+pushd gitian.sigs
+git add ${VERSION}-win-signed/"${SIGNER}"
+git add ${VERSION}-osx-signed/"${SIGNER}"
+git commit -m "Add ${VERSION} unsigned sigs for ${SIGNER}"
+git push  # Assuming you can push to the gitian.sigs tree
+popd
+```
+
 
 Docs/resources:
 - https://github.com/devrandom/gitian-builder
