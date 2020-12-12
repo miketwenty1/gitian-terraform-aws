@@ -38,6 +38,8 @@ export VERSION=0.21.0rc3
 export MEMORY_MB=25000 
 # number of cpu cores for faster builds
 export THREADS=15 
+# method
+export USE_DOCKER=1
 
 cd /gitian/
 bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddnb ${SIGNER} ${VERSION}
