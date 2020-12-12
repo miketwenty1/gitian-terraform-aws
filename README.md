@@ -26,8 +26,8 @@ module "gitian" {
 ```
 
 ### NOTES:
-- The purpose of this module is to easily check the gitian build checksums for yourself extra manual steps are required if you want to be a gitian signer:
-  - https://github.com/bitcoin-core/docs/blob/master/gitian-building.md
+- The purpose of this module is to easily check the gitian build checksums for yourself extra manual steps are required
+- if you want to be a gitian signer this is not the offical guide please refer to the [docs of gitian builds](#official-docs), however this will take you through the steps of building with docker for windows and linux. (Your results may vary)
 - If you want to run subsequent builds from the same server `ssh/cd` into `/gitian/bitcoin` and see the instructions below.
 - If you want to be a gitian contributor you will want to also setup:
   - git (git config / ssh keys)
@@ -111,7 +111,7 @@ popd
 ```
 
 
-Docs/resources:
+### official-docs:
 - https://github.com/devrandom/gitian-builder
 - https://github.com/bitcoin/bitcoin/blob/master/doc/release-process.md
 - https://github.com/bitcoin-core/docs/blob/master/gitian-building.md
