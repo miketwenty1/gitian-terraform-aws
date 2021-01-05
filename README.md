@@ -91,21 +91,16 @@ mv build/out/bitcoin-osx-signed.dmg ../bitcoin-${VERSION}-osx.dmg
 popd
 ```
 ### Windows
-notice that these commands use "signature" flag instead of "bitcoin"
+notice that these commands use '-s' "signature" flag instead of "-b"
 ```
-pushd ./gitian-builder
-bin/gbuild --num-make ${THREADS} --memory ${MEMORY_MB} --commit signature=v${VERSION} ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-mv build/out/bitcoin-*win64-setup.exe ../bitcoin-${VERSION}-win64-setup.exe
-popd
+bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddns ${SIGNER} ${VERSION}
 ```
 ### Push signed binary sigs
 ```
 pushd gitian.sigs
 git add ${VERSION}-win-signed/"${SIGNER}"
 git add ${VERSION}-osx-signed/"${SIGNER}"
-git commit -m "Add ${VERSION} unsigned sigs for ${SIGNER}"
+git commit -m "Add ${VERSION} signed sigs for ${SIGNER}"
 git push  # Assuming you can push to the gitian.sigs tree
 popd
 ```
