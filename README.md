@@ -80,17 +80,8 @@ popd
 ```
 # signed builds for OSX and Windows (When they are ready)
 Once signed builds are available you may want to go back and sign those as well
-### OSX
-notice that these commands use "signature" flag instead of "bitcoin"
-```
-pushd ./gitian-builder
-./bin/gbuild -i --commit signature=v${VERSION} ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-./bin/gsign --signer "$SIGNER" --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-mv build/out/bitcoin-osx-signed.dmg ../bitcoin-${VERSION}-osx.dmg
-popd
-```
-### Windows
+
+### Windows and Mac signed Builds
 notice that these commands use '-s' "signature" flag instead of "-b"
 ```
 bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddns ${SIGNER} ${VERSION}
