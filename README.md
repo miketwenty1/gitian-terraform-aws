@@ -92,6 +92,10 @@ bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddns ${SIGNER} ${
 pushd gitian.sigs
 git add ${VERSION}-win-signed/"${SIGNER}"
 git add ${VERSION}-osx-signed/"${SIGNER}"
+gpg --output ${VERSION}-win-signed/${SIGNER}/bitcoin-core-win-${VERSION%\.*}-build.assert.sig --detach-sign ${VERSION}-win-signed/$SIGNER/bitcoin-core-win-${VERSION%\.*}-build.assert
+gpg --output ${VERSION}-osx-signed/${SIGNER}/bitcoin-osx-signer-build.assert.sig --detach-sign ${VERSION}-osx-signed/$SIGNER/bitcoin-osx-signer-build.assert
+git add ${VERSION}-win-signed/${SIGNER}/bitcoin-win-signer-build.assert.sig
+git add ${VERSION}-osx-signed/${SIGNER}/bitcoin-osx-signer-build.assert.sig
 git commit -m "Add ${VERSION} signed sigs for ${SIGNER}"
 git push ${SIGNER} ${VERSION} # pushing to your own repo
 popd
