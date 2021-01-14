@@ -71,11 +71,12 @@ popd
 ### Push unsigned binary sigs
 ```
 pushd gitian.sigs
+git checkout -b ${VERSION}
 git add ${VERSION}-linux/"${SIGNER}"
 git add ${VERSION}-win-unsigned/"${SIGNER}"
 git add ${VERSION}-osx-unsigned/"${SIGNER}"
 git commit -m "Add ${VERSION} unsigned sigs for ${SIGNER}"
-git push  # Assuming you can push to the gitian.sigs tree
+git push ${SIGNER} ${VERSION} # pushing to your own repo
 popd
 ```
 # signed builds for OSX and Windows (When they are ready)
@@ -92,7 +93,7 @@ pushd gitian.sigs
 git add ${VERSION}-win-signed/"${SIGNER}"
 git add ${VERSION}-osx-signed/"${SIGNER}"
 git commit -m "Add ${VERSION} signed sigs for ${SIGNER}"
-git push  # Assuming you can push to the gitian.sigs tree
+git push ${SIGNER} ${VERSION} # pushing to your own repo
 popd
 ```
 
