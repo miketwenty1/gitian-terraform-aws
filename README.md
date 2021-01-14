@@ -87,7 +87,7 @@ notice that these commands use '-s' "signature" flag instead of "-b"
 ```
 bitcoin/contrib/gitian-build.py -j ${THREADS} -m ${MEMORY_MB} -Ddns ${SIGNER} ${VERSION}
 ```
-### Push signed binary sigs
+### Push & sign, signed binary sigs
 ```
 pushd gitian.sigs
 git add ${VERSION}-win-signed/"${SIGNER}"
